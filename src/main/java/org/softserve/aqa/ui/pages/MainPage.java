@@ -1,10 +1,10 @@
-package org.softserve.aqa.ui;
+package org.softserve.aqa.ui.pages;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.softserve.aqa.ui.pages.BasePage;
+import org.softserve.aqa.ui.BasePage;
 
 @Slf4j
 public class MainPage extends BasePage {

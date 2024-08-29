@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.softserve.aqa.ui.MainPage;
+import org.softserve.aqa.ui.pages.MainPage;
 
 public class MainPageTest {
 

@@ -1,4 +1,4 @@
-package org.softserve.aqa.ui.pages;
+package org.softserve.aqa.ui;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
