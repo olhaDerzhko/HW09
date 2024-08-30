@@ -1,23 +1,15 @@
-package org.softserve.aqa.ui.pages;
+package org.softserve.aqa.ui.pages.autorizationpage;
 
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.softserve.aqa.ui.BasePage;
 
-@Slf4j
-public class MainPage extends BasePage {
+public class SignInPage extends BasePage {
 
-    public MainPage(WebDriver driver) {
+    public SignInPage(WebDriver driver) {
         super(driver);
     }
-
-    @FindBy(xpath = "//ul/li/span")
-    private WebElement languageDropdown;
-
-    @FindBy(xpath = "//li/span[contains(text(), 'En')]")
-    private WebElement enLanguage;
 
     @FindBy(css = "img[alt='sing in button']")
     private WebElement signInButton;
@@ -48,19 +40,6 @@ public class MainPage extends BasePage {
 
     public void clickSignInButton() {
         signInButton.click();
-    }
-
-    public void switchToEnLanguage() {
-        log.info("Checking current language and switching to EN if necessary");
-
-        String currentLangText = languageDropdown.getText().trim();
-        if (currentLangText.equalsIgnoreCase("ua")) {
-            log.info("Current language is Ukrainian. Switching to English.");
-            languageDropdown.click();
-            enLanguage.click();
-        } else {
-            log.info("Language is already English. No need to switch.");
-        }
     }
 
     public String getWelcomeText() {
@@ -99,9 +78,5 @@ public class MainPage extends BasePage {
 
     public String getErrorPasswordText() {
         return errorPassword.getText();
-    }
-
-    public String getTitle() {
-        return driver.getTitle();
     }
 }
