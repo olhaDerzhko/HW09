@@ -5,7 +5,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.openqa.selenium.Dimension;
@@ -13,6 +16,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.softserve.aqa.ui.pages.MainPage;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MainPageTest {
 
     private WebDriver driver;
@@ -30,15 +34,16 @@ public class MainPageTest {
         Thread.sleep(2000);
     }
 
-
-    @Test
     @DisplayName("Verify title for main page")
+    @Order(1)
+    @Test
     public void verifyTitle() {
         Assertions.assertEquals("GreenCity", mainPage.getTitle());
     }
 
-    @Test
     @DisplayName("Verify title for 'Sign In' modal'")
+    @Order(2)
+    @Test
     public void verifySignUpTitle() throws InterruptedException {
         mainPage.clickSignInButton();
         Thread.sleep(2000);
@@ -47,8 +52,9 @@ public class MainPageTest {
         Assertions.assertEquals("Please enter your details to sign in.", mainPage.getSignInDetailsText());
     }
 
-    @ParameterizedTest
     @DisplayName("Verify valid 'Sign In' flow")
+    @Order(3)
+    @ParameterizedTest
     @CsvSource({
             "samplestest@greencity.com, weyt3$Guew^"
     })
@@ -63,8 +69,9 @@ public class MainPageTest {
         mainPage.clickSubmitButton();
     }
 
-    @ParameterizedTest
     @DisplayName("Verify  error messages for email & password field")
+    @Order(5)
+    @ParameterizedTest
     @CsvSource({
             "samplestesgreencity.com, 4444444444444444444444444444444^," +
                     "Please check that your e-mail address is indicated correctly," +
@@ -83,8 +90,9 @@ public class MainPageTest {
         Assertions.assertEquals(passwordErrorMsg, mainPage.getErrorPasswordText(), "Password error message does not match");
     }
 
-    @ParameterizedTest
     @DisplayName("Verify error message when email and password are empty")
+    @Order(4)
+    @ParameterizedTest
     @CsvSource({
             "This field is required, This field is required"
     })
