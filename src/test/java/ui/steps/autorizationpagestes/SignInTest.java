@@ -24,7 +24,7 @@ public class SignInTest {
     private SignInPage signInPage;
 
     @BeforeEach
-    public void setUp() throws InterruptedException {
+    public void setUp() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.get("https://www.greencity.cx.ua/#/greenCity");
@@ -32,15 +32,13 @@ public class SignInTest {
 
         signInPage = new SignInPage(driver);
         signInPage.switchToEnLanguage();
-        Thread.sleep(2000);
     }
 
     @DisplayName("Verify title for 'Sign In' modal'")
     @Order(1)
     @Test
-    public void verifySignUpTitle() throws InterruptedException {
+    public void verifySignUpTitle() {
         signInPage.clickSignInButton();
-        Thread.sleep(2000);
 
         Assertions.assertEquals("Welcome back!", signInPage.getWelcomeText());
         Assertions.assertEquals("Please enter your details to sign in.", signInPage.getSignInDetailsText());
@@ -86,11 +84,8 @@ public class SignInTest {
     public void checkErrorMsgForInValidEmailAndPassword(String email, String password, String emailErrorMsg,
                                                         String passwordErrorMsg) throws InterruptedException {
         signInPage.clickSignInButton();
-
         signInPage.enterEmail(email);
         signInPage.enterPassword(password);
-
-        Thread.sleep(3000);
         signInPage.clickSubmitButton();
 
         Assertions.assertEquals(emailErrorMsg, signInPage.getErrorEmailText(), "Email error message does not match");
@@ -114,18 +109,16 @@ public class SignInTest {
         Assertions.assertEquals(passwordErrorMsg, signInPage.getErrorPasswordText(), "Password error message does not match");
     }
 
-//    Site don't have password validation which match this message
+    //    Site don't have password validation which match this message
 //    Password have from 8 to 20 characters long without spaces and contain at least one uppercase letter (A-Z), one lowercase letter (a-z), a digit (0-9), and a special character (~`!@#$%^&*()+=_-{}[]|:;”’?/<>,.)
     @DisplayName("Verify password validation fails for invalid passwords")
     @Order(4)
-    @ParameterizedTest(name = "{index} => password={0}")
+    @ParameterizedTest(name = "{index} => email={0}, password={1}, expectedError={2}")
     @CsvFileSource(resources = "/upload/invalid_passwords.csv", numLinesToSkip = 1)
-    public void testInvalidPasswords(String invalidPassword, String passwordErrorMsg) throws InterruptedException {
+    public void testInvalidPasswords(String email, String invalidPassword, String passwordErrorMsg) {
         signInPage.clickSignInButton();
-        signInPage.enterEmail("test@gmail.com");
-
+        signInPage.enterEmail(email);  // Use the email from CSV file
         signInPage.enterPassword(invalidPassword);
-        Thread.sleep(5000);
         signInPage.clickSignInButton();
 
         String actualErrorMsg = signInPage.getErrorPasswordText();

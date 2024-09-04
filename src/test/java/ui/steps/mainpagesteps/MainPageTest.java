@@ -9,10 +9,13 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.softserve.aqa.ui.pages.mainpage.MainPage;
+
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MainPageTest {
@@ -30,7 +33,6 @@ public class MainPageTest {
 
         mainPage = new MainPage(driver);
         mainPage.switchToEnLanguage();
-        Thread.sleep(2000);
     }
 
     @DisplayName("Verify title for main page")
@@ -38,6 +40,19 @@ public class MainPageTest {
     @Test
     public void verifyTitle() {
         Assertions.assertEquals("GreenCity", mainPage.getTitle());
+    }
+
+    @DisplayName("Verify error message is displayed for invalid email after clicking 'Subscribe' button")
+    @Order(2)
+    @ParameterizedTest(name = "{index} => email={0}")
+    @ValueSource(strings = {"sampletestgreencity.com"})
+    public void verifyEmailSubscription(String email) {
+        mainPage.fillEmailForSubscribe(email);
+        mainPage.clickOnSubscribeButton();
+        String actualMessage = mainPage.getSubscriptionErrorMessage();
+
+        String expectedErrorMessage = "Invalid email";
+        Assertions.assertEquals(expectedErrorMessage, actualMessage, "Subscription was not successful");
     }
 
     @AfterEach
