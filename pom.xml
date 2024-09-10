@@ -16,6 +16,9 @@
         <lombokVersion>1.18.20</lombokVersion>
         <apachePoiVersion>5.2.3</apachePoiVersion>
         <juintVersion>4.13.2</juintVersion>
+        <extentReportVersion>1.0.7</extentReportVersion>
+        <testngVersion>7.8.0</testngVersion>
+
     </properties>
 
     <dependencies>
@@ -82,6 +85,13 @@
             <version>${lombokVersion}</version>
         </dependency>
 
+        <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>${testngVersion}</version>
+        <scope>test</scope>
+        </dependency>
+
         <!-- - - - - - Rest - - - - - -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -110,7 +120,12 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${apachePoiVersion}</version>
         </dependency>
-
+        <!-- Reports -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports-testng-adapter</artifactId>
+            <version>${extentReportVersion}</version>
+        </dependency>
 
     </dependencies>
 

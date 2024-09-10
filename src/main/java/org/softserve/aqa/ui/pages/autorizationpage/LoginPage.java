@@ -4,15 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.softserve.aqa.data.User;
 import org.softserve.aqa.ui.BasePage;
+import org.softserve.aqa.ui.pages.homapage.HomePage;
+
+import java.time.Duration;
 
 @Slf4j
-public class SignInPage extends BasePage {
-
-    public SignInPage(WebDriver driver) {
-        super(driver);
-    }
+public class LoginPage extends BasePage {
 
     @FindBy(css = "img[alt='sing in button']")
     private WebElement signInButton;
@@ -41,9 +43,23 @@ public class SignInPage extends BasePage {
     @FindBy(xpath = "//div[@id='email-err-msg']/app-error/div")
     private WebElement errorEmail;
 
-    public void clickSignInButton() {
-        clickOnElementByJS(signInButton);
-        log.info("'Sign In' button clicked successfully");
+    @FindBy(css = "div.main .right-side a.close-modal-window")
+    private WebElement closeModalSignInWindow;
+
+
+    public LoginPage(WebDriver driver) {
+        super(driver);
+        PageFactory.initElements(driver, this);
+    }
+
+    public HomePage successfullyLogin(User validUser) {
+        setFieldValue(emailInput, validUser.getEmail());
+        setFieldValue(passwordInput, validUser.getPassword());
+
+        signInSubmitButton.click();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.urlContains("home"));
+        return new HomePage(driver);
     }
 
     public String getWelcomeText() {
@@ -56,40 +72,6 @@ public class SignInPage extends BasePage {
         return signInDetailsText.getText();
     }
 
-    public String getEmailText() {
-        log.info("Fetching the email value entered in the 'email' field");
-        return emailInput.getAttribute("value");
-    }
-
-    public String getPasswordText() {
-        log.info("Fetching the password value entered in the 'password' field");
-        return passwordInput.getAttribute("value");
-    }
-
-    public void enterEmail(String email) {
-        log.info("Filling 'email' field with value: {}", email);
-        getSmallWait().until(ExpectedConditions.visibilityOf(emailInput));
-
-        emailInput.click();
-        emailInput.sendKeys(email);
-        log.info("Email '{}' has been entered successfully", email);
-    }
-
-    public void enterPassword(String password) {
-        log.info("Filling 'password' field");
-
-        passwordInput.clear();
-        passwordInput.sendKeys(password);
-        log.info("Password has been entered successfully (masked for security)");
-    }
-
-    public void clickSubmitButton() {
-        log.info("Click on the 'Submit' button");
-        getSmallWait().until(ExpectedConditions.elementToBeClickable(passwordInput));
-
-        clickOnElementByJS(signInSubmitButton);
-    }
-
     public String getErrorEmailText() {
         log.info("Fetching error message for 'email'");
         return errorEmail.getText();
@@ -98,5 +80,10 @@ public class SignInPage extends BasePage {
     public String getErrorPasswordText() {
         log.info("Fetching error message for 'password'");
         return errorPassword.getText();
+    }
+
+    public HomePage closeLoginPage() {
+        clickOnElementByJS(closeModalSignInWindow);
+        return new HomePage(driver);
     }
 }
