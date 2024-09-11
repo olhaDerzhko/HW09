@@ -1,4 +1,4 @@
-package org.softserve.aqa.ui.pages.homapage;
+package org.softserve.aqa.ui.pages.unauthorizeduser.homepage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
@@ -7,7 +7,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.softserve.aqa.ui.BasePage;
-import org.softserve.aqa.ui.pages.autorizationpage.LoginPage;
+import org.softserve.aqa.ui.pages.autorization.LoginPage;
+
+import java.util.NoSuchElementException;
 
 @Slf4j
 public class HomePage extends BasePage {
@@ -72,8 +74,14 @@ public class HomePage extends BasePage {
         return userAuthorizationName.getText();
     }
 
-    public String getSubscriptionErrorMessage() {
-        return validationErrorSubscribeMessage.getText().trim();
+    public String  getSubscriptionErrorMessage() {
+        try {
+            getSmallWait().until(ExpectedConditions.visibilityOf(validationErrorSubscribeMessage));
+            return validationErrorSubscribeMessage.getText().trim();
+        } catch (NoSuchElementException e) {
+            log.info("Failed to find the subscription error message element. Error: {}", e.getMessage());
+            throw new RuntimeException();
+        }
     }
 
     public HomePage fillEmailForSubscribe(String email) {
@@ -86,13 +94,8 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public HomePage clickOnSubscribeButton() {
+    private void clickOnSubscribeButton() {
         subscribeButton.click();
         log.info("Subscribe button clicked successfully");
-        return this;
-    }
-
-    public HomePage signOutApplication() {
-        return new HomePage(driver);
     }
 }

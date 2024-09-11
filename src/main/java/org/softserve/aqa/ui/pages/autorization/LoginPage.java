@@ -1,4 +1,4 @@
-package org.softserve.aqa.ui.pages.autorizationpage;
+package org.softserve.aqa.ui.pages.autorization;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
@@ -6,12 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.softserve.aqa.data.User;
 import org.softserve.aqa.ui.BasePage;
-import org.softserve.aqa.ui.pages.homapage.HomePage;
-
-import java.time.Duration;
+import org.softserve.aqa.ui.pages.unauthorizeduser.homepage.HomePage;
 
 @Slf4j
 public class LoginPage extends BasePage {
@@ -43,10 +40,6 @@ public class LoginPage extends BasePage {
     @FindBy(xpath = "//div[@id='email-err-msg']/app-error/div")
     private WebElement errorEmail;
 
-    @FindBy(css = "div.main .right-side a.close-modal-window")
-    private WebElement closeModalSignInWindow;
-
-
     public LoginPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
@@ -57,9 +50,15 @@ public class LoginPage extends BasePage {
         setFieldValue(passwordInput, validUser.getPassword());
 
         signInSubmitButton.click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlContains("home"));
         return new HomePage(driver);
+    }
+
+    public LoginPage unsuccessfullyLogin (User validUser) {
+        setFieldValue(emailInput, validUser.getEmail());
+        setFieldValue(passwordInput, validUser.getPassword());
+
+        signInSubmitButton.click();
+        return new LoginPage(driver);
     }
 
     public String getWelcomeText() {
@@ -79,11 +78,8 @@ public class LoginPage extends BasePage {
 
     public String getErrorPasswordText() {
         log.info("Fetching error message for 'password'");
-        return errorPassword.getText();
-    }
+        getSmallWait().until(ExpectedConditions.visibilityOf(errorPassword));
 
-    public HomePage closeLoginPage() {
-        clickOnElementByJS(closeModalSignInWindow);
-        return new HomePage(driver);
+        return errorPassword.getText().trim();
     }
 }

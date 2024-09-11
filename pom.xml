@@ -18,6 +18,7 @@
         <juintVersion>4.13.2</juintVersion>
         <extentReportVersion>1.0.7</extentReportVersion>
         <testngVersion>7.8.0</testngVersion>
+        <javafakerVersion>1.0.2</javafakerVersion>
 
     </properties>
 
@@ -120,11 +121,19 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${apachePoiVersion}</version>
         </dependency>
+
         <!-- Reports -->
         <dependency>
             <groupId>com.aventstack</groupId>
             <artifactId>extentreports-testng-adapter</artifactId>
             <version>${extentReportVersion}</version>
+        </dependency>
+
+        <!-- Faker -->
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${javafakerVersion}</version>
         </dependency>
 
     </dependencies>
