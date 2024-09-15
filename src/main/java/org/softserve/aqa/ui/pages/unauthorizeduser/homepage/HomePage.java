@@ -76,6 +76,7 @@ public class HomePage extends BasePage {
 
     public String  getSubscriptionErrorMessage() {
         try {
+            log.info("Attempting to retrieve subscription error message");
             getSmallWait().until(ExpectedConditions.visibilityOf(validationErrorSubscribeMessage));
             return validationErrorSubscribeMessage.getText().trim();
         } catch (NoSuchElementException e) {
@@ -85,12 +86,14 @@ public class HomePage extends BasePage {
     }
 
     public HomePage fillEmailForSubscribe(String email) {
+        log.info("Attempting to fill email '{}' for subscription", email);
         scrollToElementByJS(emailSubscribeInput);
         getSmallWait().until(ExpectedConditions.visibilityOf(emailSubscribeInput));
 
         setFieldValue(emailSubscribeInput, email);
         log.info("Email '{}' for subscription has been entered successfully", email);
         clickOnSubscribeButton();
+        log.info("Subscription process initiated.");
         return this;
     }
 

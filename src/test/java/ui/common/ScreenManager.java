@@ -44,6 +44,8 @@ public class ScreenManager {
     }
 
     public void takeScreenshot(String screenshotName) {
+        log.debug("Start takeScreenShot()");
+
         TakesScreenshot screenshot = (TakesScreenshot) driver;
         byte[] screenShotAtBytes = screenshot.getScreenshotAs(OutputType.BYTES);
 
@@ -59,6 +61,8 @@ public class ScreenManager {
     }
 
     public void takePageSource(String sourceHtmlName) {
+        log.debug("Start takePageSource()");
+
         String sourceHtmlFileName = String.format("%s - %s%s", sourceHtmlName, getFormattedTime(), SOURCE_HTML_EXTENSION);
         Path path = Paths.get(sourceHtmlFolder, sourceHtmlFileName);
 

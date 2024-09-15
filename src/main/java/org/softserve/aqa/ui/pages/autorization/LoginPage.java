@@ -46,18 +46,22 @@ public class LoginPage extends BasePage {
     }
 
     public HomePage successfullyLogin(User validUser) {
+        log.info("Attempting to log in with email: {}", validUser.getEmail());
         setFieldValue(emailInput, validUser.getEmail());
         setFieldValue(passwordInput, validUser.getPassword());
 
         signInSubmitButton.click();
+        log.info("User successfully logged in");
         return new HomePage(driver);
     }
 
     public LoginPage unsuccessfullyLogin (User validUser) {
+        log.info("Attempting to log in with incorrect credentials: {}", validUser.getEmail());
         setFieldValue(emailInput, validUser.getEmail());
         setFieldValue(passwordInput, validUser.getPassword());
 
         signInSubmitButton.click();
+        log.warn("Login failed due to incorrect credentials");
         return new LoginPage(driver);
     }
 
@@ -77,7 +81,7 @@ public class LoginPage extends BasePage {
     }
 
     public String getErrorPasswordText() {
-        log.info("Fetching error message for 'password'");
+        log.info("Waiting for password error message to become visible");
         getSmallWait().until(ExpectedConditions.visibilityOf(errorPassword));
 
         return errorPassword.getText().trim();
